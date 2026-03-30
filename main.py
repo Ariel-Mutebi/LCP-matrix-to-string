@@ -102,12 +102,30 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
                         if sublimated:
                             ranges_of_equal_chars[lcp + 1].remove(pair_of_range_tuples)
 
-            print(f"Indexes of equal characters adjacency list:\n{indexes_of_equal_chars}")
-            print(f"Ranges of equal characters array:\n{ranges_of_equal_chars}")
+    def find_components(graph: dict[int, list[int]]) -> list[list[int]]:
+        visited: set[int] = set()
+        components: list[list[int]] = []
 
+        def dfs(node: int, component: list[int]):
+            visited.add(node)
+            component.append(node)
 
-# generate_equal_char_indexes([[4,0,2,0],[0,3,0,1],[2,0,2,0],[0,1,0,1]])
-generate_equal_char_indexes([[4, 3, 2, 1], [3, 3, 2, 1], [2, 2, 2, 1], [1, 1, 1, 1]])
+            for neighbour in graph[node]:
+                if neighbour not in visited:
+                    dfs(neighbour, component)
+
+        for node in graph:
+            if node not in visited:
+                component = []
+                dfs(node, component)
+                components.append(component)
+
+        return components
+
+    return find_components(indexes_of_equal_chars)
+
+print(generate_equal_char_indexes([[4,0,2,0],[0,3,0,1],[2,0,2,0],[0,1,0,1]]))
+print(generate_equal_char_indexes([[4, 3, 2, 1], [3, 3, 2, 1], [2, 2, 2, 1], [1, 1, 1, 1]]))
 
 
 class Solution:
