@@ -136,9 +136,10 @@ class Solution:
             for index in groups_of_equal_char_indexes[i]:
                 letters[index] = ascii_lowercase[i % 26]
 
-        word = "".join(letters)
+        # filter in case input matrix has borders of zeros
+        word = "".join(filter(None, letters))
 
-        # verify that original LCP matrix was symmetrical
+        # verify that original LCP matrix was symmetrical and had no zero borders
         if matrix == reconstruct_matrix(word):
             return word
         else:
