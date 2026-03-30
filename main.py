@@ -134,7 +134,7 @@ class Solution:
 
         for i in range(0, len(groups_of_equal_char_indexes)):
             for index in groups_of_equal_char_indexes[i]:
-                letters[index] = ascii_lowercase[i]
+                letters[index] = ascii_lowercase[i % 26]
 
         word = "".join(letters)
 
@@ -145,13 +145,3 @@ class Solution:
             return ""
 
 solution = Solution()
-print(solution.findTheString([
-    [8,0,0,0,0,1,2,0],
-    [0,7,0,1,1,0,0,1],
-    [0,0,6,0,0,0,0,0],
-    [0,1,0,5,1,0,0,1],
-    [0,1,0,1,4,0,0,1],
-    [1,0,0,0,0,3,1,0],
-    [2,0,0,0,0,1,2,0],
-    [0,1,0,1,1,0,0,1]
-]))
