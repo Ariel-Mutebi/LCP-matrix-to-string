@@ -4,24 +4,21 @@ from string import ascii_lowercase
 
 def reconstruct_matrix(s: str) -> list[list[int]]:
     n = len(s)
-    end = n - 1
     matrix: list[list[int | None]] = [[None for _ in range(n)] for _ in range(n)]
 
-    for i in range(0, end):
-        ss1 = s[i:end]
-        for j in range(0, end):
+    for i in range(0, n):
+        ss1 = s[i:n]
+        for j in range(0, n):
             if not matrix[i][j] is None:
                 continue
 
-            ss2 = s[j:end]
-
-            if len(ss1) > len(ss2):
-                ss1, ss2 = ss2, ss1
-
+            ss2 = s[j:n]
+            shorter = ss1 if len(ss1) < len(ss2) else ss2
+            longer = ss2 if len(ss2) > len(ss1) else ss1
             k = 0
 
-            while k < len(ss1) - 1:
-                if not ss1[k] == ss2[k]:
+            while k < len(shorter):
+                if not shorter[k] == longer[k]:
                     break
                 k += 1
 
@@ -126,8 +123,13 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
 
 class Solution:
     def findTheString(self, matrix: list[list[int]]) -> str:
-        groups_of_equal_char_indexes = generate_equal_char_indexes(matrix)
-        groups_of_equal_char_indexes.sort(key=sum) # to minimise lexicographical size
+        try:
+            groups_of_equal_char_indexes = generate_equal_char_indexes(matrix)
+        except ValueError:
+            return ""
+
+        # I have to minimise lexicographical size.
+        groups_of_equal_char_indexes.sort(key=sum)
         letters: list[str | None] = [None for _ in range(len(matrix))]
 
         for i in range(0, len(groups_of_equal_char_indexes)):
@@ -136,8 +138,11 @@ class Solution:
 
         word = "".join(letters)
 
-        return word
+        # verify that original LCP matrix was consistent
+        if matrix == reconstruct_matrix(word):
+            return word
+        else:
+            return ""
 
 solution = Solution()
-print(solution.findTheString([[4,0,2,0],[0,3,0,1],[2,0,2,0],[0,1,0,1]]))
-print(solution.findTheString([[4,3,2,1],[3,3,2,1],[2,2,2,1],[1,1,1,1]]))
+print(solution.findTheString([[4,3,2,1],[3,3,2,1],[2,2,2,1],[1,1,1,3]]))
