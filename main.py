@@ -50,7 +50,7 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
         for j in range(i, n):
             lcp = matrix[i][j]
             if lcp <= 0:
-                continue  # also noise
+                continue
 
             if lcp == 1:
                 indexes_of_equal_chars[i].append(j)
@@ -121,8 +121,6 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
 
     return find_components(indexes_of_equal_chars)
 
-print(generate_equal_char_indexes([[2,0],[0,1]]))
-
 class Solution:
     def findTheString(self, matrix: list[list[int]]) -> str:
         try:
@@ -130,8 +128,8 @@ class Solution:
         except ValueError:
             return ""
 
-        # I have to minimise lexicographical size.
-        groups_of_equal_char_indexes.sort(key=sum)
+        # to minimise lexicographical size.
+        groups_of_equal_char_indexes.sort(key=min)
         letters: list[str | None] = [None for _ in range(len(matrix))]
 
         for i in range(0, len(groups_of_equal_char_indexes)):
@@ -140,8 +138,20 @@ class Solution:
 
         word = "".join(letters)
 
-        # verify that original LCP matrix was consistent
+        # verify that original LCP matrix was symmetrical
         if matrix == reconstruct_matrix(word):
             return word
         else:
             return ""
+
+solution = Solution()
+print(solution.findTheString([
+    [8,0,0,0,0,1,2,0],
+    [0,7,0,1,1,0,0,1],
+    [0,0,6,0,0,0,0,0],
+    [0,1,0,5,1,0,0,1],
+    [0,1,0,1,4,0,0,1],
+    [1,0,0,0,0,3,1,0],
+    [2,0,0,0,0,1,2,0],
+    [0,1,0,1,1,0,0,1]
+]))
