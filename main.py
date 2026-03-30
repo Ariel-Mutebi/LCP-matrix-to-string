@@ -45,10 +45,9 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
     ranges_of_equal_chars: dict[int, list[RangePair]] = defaultdict(list)
 
     # The "signal" part of the matrix is the top-right half above the diagonal line.
-    # The values on the diagonal line are noise, and the bottom-left is a reflection.
-    for i in range(0, max(n - 1, 1)):
-        j_lower = i + 1 if n > 1 else 0
-        for j in range(j_lower, n):
+    # The bottom-left half is a reflection.
+    for i in range(0, n):
+        for j in range(i, n):
             lcp = matrix[i][j]
             if lcp <= 0:
                 continue  # also noise
@@ -122,7 +121,7 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
 
     return find_components(indexes_of_equal_chars)
 
-print(generate_equal_char_indexes([[1]]))
+print(generate_equal_char_indexes([[2,0],[0,1]]))
 
 class Solution:
     def findTheString(self, matrix: list[list[int]]) -> str:
