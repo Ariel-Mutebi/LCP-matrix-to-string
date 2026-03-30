@@ -1,5 +1,6 @@
 # I decided to John Carmack up and not ask AI this time.
 from collections import defaultdict
+from string import ascii_lowercase
 
 def reconstruct_matrix(s: str) -> list[list[int]]:
     n = len(s)
@@ -31,7 +32,6 @@ def reconstruct_matrix(s: str) -> list[list[int]]:
                 matrix[j][i] = k
 
     return matrix
-
 
 def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
     n = len(matrix)
@@ -124,10 +124,20 @@ def generate_equal_char_indexes(matrix: list[list[int]]) -> list[list[int]]:
 
     return find_components(indexes_of_equal_chars)
 
-print(generate_equal_char_indexes([[4,0,2,0],[0,3,0,1],[2,0,2,0],[0,1,0,1]]))
-print(generate_equal_char_indexes([[4, 3, 2, 1], [3, 3, 2, 1], [2, 2, 2, 1], [1, 1, 1, 1]]))
-
-
 class Solution:
     def findTheString(self, matrix: list[list[int]]) -> str:
-        pass
+        groups_of_equal_char_indexes = generate_equal_char_indexes(matrix)
+        groups_of_equal_char_indexes.sort(key=sum) # to minimise lexicographical size
+        letters: list[str | None] = [None for _ in range(len(matrix))]
+
+        for i in range(0, len(groups_of_equal_char_indexes)):
+            for index in groups_of_equal_char_indexes[i]:
+                letters[index] = ascii_lowercase[i]
+
+        word = "".join(letters)
+
+        return word
+
+solution = Solution()
+print(solution.findTheString([[4,0,2,0],[0,3,0,1],[2,0,2,0],[0,1,0,1]]))
+print(solution.findTheString([[4,3,2,1],[3,3,2,1],[2,2,2,1],[1,1,1,1]]))
